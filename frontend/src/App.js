@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { marked } from 'marked';
 
 function App() {
+  const [markdown, setMarkdown] = useState('');
+
+  useEffect(() => {
+    fetch('/CHANGELOG.md')
+      .then((res) => res.text())
+      .then((text) => {
+        setMarkdown(marked(text));
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: '2rem' }}>
+      <h1>📄 Changelog</h1>
+      <div
+        dangerouslySetInnerHTML={{ __html: markdown }}
+        style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '8px' }}
+      />
     </div>
   );
 }
